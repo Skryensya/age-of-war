@@ -6,11 +6,11 @@ const CASTLES = [
     influence: 3,
     require_samuray_to_conquer: false,
     needed_units_to_defeat: [
-      { type: archer, quantity: 1 },
-      { type: cavalry, quantity: 1 },
-      { type: samuray, quantity: 2 },
+      { type: "archer", quantity: 1 },
+      { type: "cavalry", quantity: 1 },
+      { type: "samuray", quantity: 2 },
       {
-        type: swordsman,
+        type: "swordsman",
         quantity: 4,
       },
     ],
@@ -22,9 +22,9 @@ const CASTLES = [
     influence: 2,
     require_samuray_to_conquer: true,
     needed_units_to_defeat: [
-      { type: samuray, quantity: 1 },
+      { type: "samuray", quantity: 1 },
       {
-        type: swordsman,
+        type: "swordsman",
         quantity: 8,
       },
     ],
@@ -35,14 +35,14 @@ const CASTLES = [
     influence: 2,
     require_samuray_to_conquer: true,
     needed_units_to_defeat: [
-      { type: cavalry, quantity: 1 },
-      { type: cavalry, quantity: 1 },
+      { type: "cavalry", quantity: 1 },
+      { type: "cavalry", quantity: 1 },
       {
-        type: swordsman,
+        type: "swordsman",
         quantity: 5,
       },
       {
-        type: swordsman,
+        type: "swordsman",
         quantity: 2,
       },
     ],
@@ -54,12 +54,12 @@ const CASTLES = [
     influence: 3,
     require_samuray_to_conquer: true,
     needed_units_to_defeat: [
-      { type: archer, quantity: 1 },
-      { type: archer, quantity: 1 },
-      { type: cavalry, quantity: 1 },
-      { type: cavalry, quantity: 1 },
+      { type: "archer", quantity: 1 },
+      { type: "archer", quantity: 1 },
+      { type: "cavalry", quantity: 1 },
+      { type: "cavalry", quantity: 1 },
       {
-        type: swordsman,
+        type: "swordsman",
         quantity: 3,
       },
     ],
@@ -70,11 +70,11 @@ const CASTLES = [
     influence: 2,
     require_samuray_to_conquer: true,
     needed_units_to_defeat: [
-      { type: samuray, quantity: 1 },
-      { type: archer, quantity: 1 },
-      { type: cavalry, quantity: 1 },
+      { type: "samuray", quantity: 1 },
+      { type: "archer", quantity: 1 },
+      { type: "cavalry", quantity: 1 },
       {
-        type: swordsman,
+        type: "swordsman",
         quantity: 3,
       },
     ],
@@ -85,9 +85,9 @@ const CASTLES = [
     influence: 1,
     require_samuray_to_conquer: true,
     needed_units_to_defeat: [
-      { type: samuray, quantity: 1 },
-      { type: archer, quantity: 1 },
-      { type: archer, quantity: 1 },
+      { type: "samuray", quantity: 1 },
+      { type: "archer", quantity: 1 },
+      { type: "archer", quantity: 1 },
     ],
   },
   // ---
@@ -97,13 +97,13 @@ const CASTLES = [
     influence: 2,
     require_samuray_to_conquer: true,
     needed_units_to_defeat: [
-      { type: samuray, quantity: 1 },
+      { type: "samuray", quantity: 1 },
       {
-        type: swordsman,
+        type: "swordsman",
         quantity: 4,
       },
       {
-        type: swordsman,
+        type: "swordsman",
         quantity: 4,
       },
     ],
@@ -114,9 +114,9 @@ const CASTLES = [
     influence: 1,
     require_samuray_to_conquer: true,
     needed_units_to_defeat: [
-      { type: samuray, quantity: 1 },
-      { type: samuray, quantity: 1 },
-      { type: cavalry, quantity: 1 },
+      { type: "samuray", quantity: 1 },
+      { type: "samuray", quantity: 1 },
+      { type: "cavalry", quantity: 1 },
     ],
   },
   // ---
@@ -126,10 +126,10 @@ const CASTLES = [
     influence: 4,
     require_samuray_to_conquer: true,
     needed_units_to_defeat: [
-      { type: archer, quantity: 1 },
-      { type: archer, quantity: 1 },
-      { type: cavalry, quantity: 1 },
-      { type: cavalry, quantity: 1 },
+      { type: "archer", quantity: 1 },
+      { type: "archer", quantity: 1 },
+      { type: "cavalry", quantity: 1 },
+      { type: "cavalry", quantity: 1 },
     ],
   },
   {
@@ -138,11 +138,11 @@ const CASTLES = [
     influence: 3,
     require_samuray_to_conquer: true,
     needed_units_to_defeat: [
-      { type: samuray, quantity: 1 },
-      { type: archer, quantity: 1 },
-      { type: cavalry, quantity: 1 },
+      { type: "samuray", quantity: 1 },
+      { type: "archer", quantity: 1 },
+      { type: "cavalry", quantity: 1 },
       {
-        type: swordsman,
+        type: "swordsman",
         quantity: 4,
       },
     ],
@@ -155,9 +155,9 @@ const CASTLES = [
     influence: 1,
     require_samuray_to_conquer: true,
     needed_units_to_defeat: [
-      { type: samuray, quantity: 1 },
-      { type: archer, quantity: 1 },
-      { type: cavalry, quantity: 1 },
+      { type: "samuray", quantity: 1 },
+      { type: "archer", quantity: 1 },
+      { type: "cavalry", quantity: 1 },
     ],
   },
   {
@@ -166,10 +166,10 @@ const CASTLES = [
     influence: 2,
     require_samuray_to_conquer: true,
     needed_units_to_defeat: [
-      { type: archer, quantity: 1 },
-      { type: archer, quantity: 1 },
+      { type: "archer", quantity: 1 },
+      { type: "archer", quantity: 1 },
       {
-        type: swordsman,
+        type: "swordsman",
         quantity: 7,
       },
     ],
@@ -181,7 +181,7 @@ const CASTLES = [
     require_samuray_to_conquer: true,
     needed_units_to_defeat: [
       {
-        type: swordsman,
+        type: "swordsman",
         quantity: 10,
       },
     ],
@@ -192,11 +192,11 @@ const CASTLES = [
     influence: 3,
     require_samuray_to_conquer: true,
     needed_units_to_defeat: [
-      { type: archer, quantity: 1 },
-      { type: cavalry, quantity: 1 },
-      { type: cavalry, quantity: 1 },
+      { type: "archer", quantity: 1 },
+      { type: "cavalry", quantity: 1 },
+      { type: "cavalry", quantity: 1 },
       {
-        type: swordsman,
+        type: "swordsman",
         quantity: 5,
       },
     ],
