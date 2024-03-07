@@ -7,11 +7,13 @@
   "author": "Allison peña",
   "license": "MIT",
   "scripts": {
-    "dev": "vite --port 3000",
+    "dev": "vite --port 3000 & npm run build:tailwind",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "build:tailwind": "npx tailwindcss -i ./src/input.css -o ./src/output.css --watch"
   },
   "devDependencies": {
+    "tailwindcss": "^3.4.1",
     "vite": "^5.1.4"
   }
 }
