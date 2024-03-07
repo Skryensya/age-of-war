@@ -1,0 +1,5 @@
+# basic gitinore for a js project
+
+node_modules
+.DS_Store
+*-lock.lock

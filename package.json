@@ -1,0 +1,9 @@
+{
+  "name": "age-of-war",
+  "version": "1.0.0",
+  "description": "clone of homonim board game",
+  "main": "main.js",
+  "author": "Allison peña",
+  "license": "MIT",
+  "dependencies": {}
+}
