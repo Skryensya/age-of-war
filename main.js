@@ -12,8 +12,6 @@ import { CASTLES, DICE } from "./datasets.js";
 // if from the remainig dices, the player has a samuray, he can conquer a castle
 // repeat until the castle is conquered or if the player ran out of dices
 
-const addPlayer = (name = null) => {};
-
 // TODO: make editable variables
 let playerNames = ["Allison", "Camila", "Israel", "Dafne", "Pascal", "Jorge"];
 let selected_number_of_players = 2;
@@ -33,27 +31,54 @@ const setupPlayers = () => {
   return players;
 };
 
-// roll the dice
-function rollDice(dice) {
-  // Flatten the dice array based on quantity to simulate individual faces
-  let diceFaces = [];
-  dice.forEach((die) => {
-    for (let i = 0; i < die.quantity; i++) {
-      diceFaces.push(die);
-    }
-  });
-
-  // Randomly select a face to simulate the dice roll
-  let rollIndex = Math.floor(Math.random() * diceFaces.length);
-  return diceFaces[rollIndex];
-}
-
-function rollMultipleDice(quantity) {
+function rollDices(quantity) {
+  const dice = DICE;
   let rolls = [];
   for (let i = 0; i < quantity; i++) {
-    rolls.push(rollDice(DICE));
+    // Flatten the dice array based on quantity to simulate individual faces
+    let diceFaces = [];
+    dice.forEach((die) => {
+      for (let i = 0; i < die.quantity; i++) {
+        diceFaces.push(die);
+      }
+    });
+
+    // Randomly select a face to simulate the dice roll
+    let rollIndex = Math.floor(Math.random() * diceFaces.length);
+
+    rolls.push(diceFaces[rollIndex]);
   }
   return rolls;
+}
+
+function checkCastlesToAttack(dices) {
+  //  go dice by dice, check if the it has a match between the military units needed to conquer the dice face, if so, push to an object with the name of the castle as the key and the value being an array of the military units needed to conquer it
+  // const available = [];
+  // make it a MAP
+  const available = new Map();
+  dices.forEach((dice) => {
+    CASTLES.forEach((castle) => {
+      let units_already_rolled = [];
+      if (
+        castle.needed_units_to_defeat.some((unit) => {
+          const match =
+            unit.type === dice.type && unit.quantity <= dice.quantity;
+          if (match) units_already_rolled.push(unit);
+          return match;
+        })
+      ) {
+        // can beconquered instantly
+        const canBeConquered =
+          units_already_rolled.length === castle.needed_units_to_defeat.length;
+        available.set(castle.name, {
+          needed_units_to_defeat: castle.needed_units_to_defeat,
+          units_already_rolled: units_already_rolled,
+          canBeConquered,
+        });
+      }
+    });
+  });
+  return available;
 }
 
 function Game() {
@@ -68,9 +93,15 @@ function Game() {
     console.log(`Turn: ${turn}`);
     let remainigDices = 7;
 
+    // roll dices
     while (remainigDices > 0) {
       console.log(`Remaining dices: ${remainigDices}`);
-      console.table(rollMultipleDice(remainigDices));
+      const roll = rollDices(remainigDices);
+      // console.table(roll);
+      // show which castles can be attacked
+      const available = checkCastlesToAttack(roll);
+      console.log(Array.from(available).map((castle) => castle.canBeConquered));
+
       remainigDices--;
     }
 

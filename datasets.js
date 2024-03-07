@@ -204,12 +204,17 @@ const CASTLES = [
 ];
 
 const DICE = [
-  { type: "archer", quantity: 1 },
-  { type: "cavalry", quantity: 1 },
-  { type: "samuray", quantity: 1 },
-  { type: "swordsman", quantity: 1 },
-  { type: "swordsman", quantity: 2 },
-  { type: "swordsman", quantity: 3 },
+  // { type: "archer", quantity: 1 },
+  // { type: "cavalry", quantity: 1 },
+  // { type: "samuray", quantity: 1 },
+  // { type: "swordsman", quantity: 1 },
+  // { type: "swordsman", quantity: 2 },
+  { type: "swordsman", quantity: 10 },
+  { type: "swordsman", quantity: 10 },
+  { type: "swordsman", quantity: 10 },
+  { type: "swordsman", quantity: 10 },
+  { type: "swordsman", quantity: 10 },
+  { type: "swordsman", quantity: 10 },
 ];
 
 export { CASTLES, DICE };
