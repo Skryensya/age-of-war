@@ -70,6 +70,7 @@ function rollDices(quantity) {
 }
 
 function checkIfCastleCanBeAttacked(roll, castle) {
+  if (!castle) return [false, []];
   const neededUnits = castle.needed_units_to_defeat;
   const isConqueredByAnotherPlayer = castle.conquered_by !== null;
   const needsSamuray = castle.require_samuray_to_conquer;
@@ -78,20 +79,20 @@ function checkIfCastleCanBeAttacked(roll, castle) {
   }
   let canBeAttacked = false;
   let remainingRoll = roll;
-  let usedToAttack = [];
+  let unitsThatCanAttack = [];
   // console.log({ neededUnits });
   neededUnits.forEach((unit) => {
     const index = remainingRoll.findIndex((r) => {
       return r.type === unit.type && r.quantity >= unit.quantity;
     });
     if (index === -1) return;
-    usedToAttack.push(remainingRoll[index]);
+    unitsThatCanAttack.push(remainingRoll[index]);
     remainingRoll.splice(index, 1);
   });
-  if (usedToAttack.length > 0) {
+  if (unitsThatCanAttack.length > 0) {
     canBeAttacked = true;
   }
-  return [canBeAttacked, usedToAttack];
+  return [canBeAttacked, unitsThatCanAttack];
 }
 
 // draw functions
@@ -103,41 +104,35 @@ function drawCastle(castle, selector) {
   castleElement.classList = "border border-black p-4 m-4 ";
   castleElement.style.backgroundColor = castle.color;
   castleElement.innerHTML = `
-    <div class="aspect-square flex flex-col justify-between" >
+    <div class="aspect-square flex flex-col justify-between">
       <div class="flex justify-between h-full">
-          <div class="flex flex-col justify-between">
+        <div class="flex flex-col justify-between">
           <div>
-          ${
-            castle.require_samuray_to_conquer
-              ? `<img src="/assets/units/red-samuray.png" class="ratio-square w-12"/>`
-              : ""
-          }
+            ${
+              castle.require_samuray_to_conquer
+                ? `<img src="/assets/units/red-samuray.png" class="ratio-square w-12" />`
+                : ""
+            }
           </div>
           <div class="flex flex-col">
-          <p class="text-xl font-bold">${castle.influence}</p>
+            <p class="text-xl font-bold">${castle.influence}</p>
             <span class="text-2xl">${castle.name}</span>
             <span class="text-sm">${castle.realm}</span>
           </div>
-          </div>
-          <div class="grid grid-cols-2 gap-1 gap-y-3 min-w-[80px] h-fit">
+        </div>
+        <div class="grid grid-cols-2 gap-1 gap-y-3 min-w-[80px] h-fit">
           ${castle.needed_units_to_defeat
             .map((unit) => {
               return unit.type === "swordsman"
-                ? `<div class="border p-2 flex justify-between items-center col-span-2">
-                  ${unit.quantity}
-                  <img src="/assets/units/${unit.img}" class="ratio-square w-12"/>
-                  </div>
-                  `
-                : `<img src="/assets/units/${unit.img}" class="ratio-square w-12"/>`;
+                ? `<div class="border p-2 flex gap-1 justify-between items-center col-span-2">
+                      <div class="p-2">${unit.quantity}</div>  
+                      <img src="/assets/units/${unit.img}" class="ratio-square w-12" />
+                    </div>`
+                : `<img src="/assets/units/${unit.img}" class="ratio-square w-12" />`;
             })
             .join("")}
-              
-          </div>
+        </div>
       </div>
-     
-
-  
-     
     </div>
     `;
 
@@ -152,7 +147,7 @@ function Game() {
   const players = setupPlayers();
   const castles = setupCastlesUnitImages(CASTLES);
 
-  console.log(castles);
+  // console.log(castles);
 
   castles.forEach((castle) => {
     drawCastle(castle, "#board");
@@ -162,6 +157,7 @@ function Game() {
   while (true) {
     console.log(`Turn: ${turn}`);
     let remainigDices = 7;
+    let selectedCastle = null;
 
     // roll dices
     while (remainigDices > 0) {
@@ -169,16 +165,56 @@ function Game() {
       const roll = rollDices(remainigDices);
       // console.table(roll);
       // show which castles can be attacked
-      castles.forEach((castle) => {
-        const [canAttack, usedToAttack] = checkIfCastleCanBeAttacked(
-          roll,
-          castle
-        );
-        // if (canAttack)
-        //   console.log({ castleName: castle.name, canAttack, usedToAttack });
+
+      // test here if you already have a selected castle
+      selectedCastle = castles.find((castle) => {
+        return castle.name === "Azuchi";
       });
 
+      if (!selectedCastle) {
+        castles.forEach((castle, _index) => {
+          const [canAttack, unitsThatCanAttack] = checkIfCastleCanBeAttacked(
+            roll,
+            castle
+          );
+
+          // test
+          if (canAttack) {
+            // setting the last castle that can be attacked as the selected castle for testing purposes
+            selectedCastle = castle;
+          }
+
+          // HIGHLIGHT CASTLES THAT CAN BE ATTACKED
+          // HICHLIGHT THE UNITS THAT we can use to attack the castle, both in the roll and in the castle
+          // select which castle to attack with user input (await primise)
+        });
+      }
+
+      //! TODO: can checkIfCastleCanBeAttacked is not working as expected
+      const canAttackSelectedCastle = checkIfCastleCanBeAttacked(
+        roll,
+        selectedCastle
+      );
+
+      // if !canAttackSelectedCastle, the player can't keep trying to conquer the castle and a end of turn is triggered
+      if (!canAttackSelectedCastle) {
+        console.log("Can't attack the selected castle");
+        --remainigDices;
+        break;
+      }
+
+      console.log("can attack the selected castle", selectedCastle.name);
+
+      // Attack the selectedcastle with the selected units from the roll
+
+      const usedToAttack = [];
+
+      // rest the amount of dices used from the remaining dices
+
+      // at lest -1 but can grow to all the dice used
       remainigDices--;
+
+      // run the loop again
     }
 
     if (isGameOver) {
