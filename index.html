@@ -9,9 +9,9 @@
     <!-- <link rel="stylesheet" href="/src/styles/output.css" /> -->
     <script src="https://cdn.tailwindcss.com"></script>
   </head>
-  <body>
+  <body class="opacity-[0.2]">
     <div class="flex">
-      <div id="board" class="flex flex-col border p-2 w-full">
+      <div id="board" class="flex flex-col border p-2 w-full pb-40">
         <p>board</p>
       </div>
       <div id="player1" class="flex flex-col border p-2 w-full">
@@ -21,10 +21,10 @@
         <p>player2</p>
       </div>
       <div
-        id="player2"
-        class="fixed bottom-0 w-screen p-8 border border-red-400"
+        id="dice-roll"
+        class="fixed bottom-0 w-screen p-8 border border-red-400 bg-white"
       >
-        <p>dice roll</p>
+        <p>Dice roll</p>
       </div>
     </div>
     <script type="module" src="/main.js"></script>

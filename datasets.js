@@ -5,7 +5,7 @@ const CASTLES = [
     name: "Kumamoto",
     influence: 3,
     require_samuray_to_conquer: false,
-    needed_units_to_defeat: [
+    units: [
       { type: "archer", quantity: 1 },
       { type: "cavalry", quantity: 1 },
       { type: "samuray", quantity: 1 },
@@ -16,6 +16,7 @@ const CASTLES = [
       },
     ],
     conquered_by: null,
+    
   },
   //   ---
   {
@@ -24,7 +25,7 @@ const CASTLES = [
     name: "Gassantoda",
     influence: 2,
     require_samuray_to_conquer: true,
-    needed_units_to_defeat: [
+    units: [
       { type: "samuray", quantity: 1 },
       {
         type: "swordsman",
@@ -32,6 +33,7 @@ const CASTLES = [
       },
     ],
     conquered_by: null,
+    
   },
   {
     color: "orange",
@@ -39,7 +41,7 @@ const CASTLES = [
     name: "Takahashi",
     influence: 2,
     require_samuray_to_conquer: true,
-    needed_units_to_defeat: [
+    units: [
       { type: "cavalry", quantity: 1 },
       { type: "cavalry", quantity: 1 },
       {
@@ -52,6 +54,7 @@ const CASTLES = [
       },
     ],
     conquered_by: null,
+    
   },
   //   ---
   {
@@ -60,7 +63,7 @@ const CASTLES = [
     name: "Edo",
     influence: 3,
     require_samuray_to_conquer: true,
-    needed_units_to_defeat: [
+    units: [
       { type: "archer", quantity: 1 },
       { type: "archer", quantity: 1 },
       { type: "cavalry", quantity: 1 },
@@ -71,6 +74,7 @@ const CASTLES = [
       },
     ],
     conquered_by: null,
+    
   },
   {
     color: "lightgray",
@@ -78,7 +82,7 @@ const CASTLES = [
     name: "kiyosu",
     influence: 2,
     require_samuray_to_conquer: true,
-    needed_units_to_defeat: [
+    units: [
       { type: "samuray", quantity: 1 },
       { type: "archer", quantity: 1 },
       { type: "cavalry", quantity: 1 },
@@ -88,6 +92,7 @@ const CASTLES = [
       },
     ],
     conquered_by: null,
+    
   },
   {
     color: "lightgray",
@@ -95,7 +100,7 @@ const CASTLES = [
     name: "Inuyama",
     influence: 1,
     require_samuray_to_conquer: true,
-    needed_units_to_defeat: [
+    units: [
       { type: "samuray", quantity: 1 },
       { type: "archer", quantity: 1 },
       { type: "archer", quantity: 1 },
@@ -108,7 +113,7 @@ const CASTLES = [
     name: "Matsuyama",
     influence: 2,
     require_samuray_to_conquer: true,
-    needed_units_to_defeat: [
+    units: [
       { type: "samuray", quantity: 1 },
       {
         type: "swordsman",
@@ -120,6 +125,7 @@ const CASTLES = [
       },
     ],
     conquered_by: null,
+    
   },
   {
     color: "darkgray",
@@ -127,7 +133,7 @@ const CASTLES = [
     name: "Marugame",
     influence: 1,
     require_samuray_to_conquer: true,
-    needed_units_to_defeat: [
+    units: [
       { type: "samuray", quantity: 1 },
       { type: "samuray", quantity: 1 },
       { type: "cavalry", quantity: 1 },
@@ -140,7 +146,7 @@ const CASTLES = [
     name: "Kasugayama",
     influence: 4,
     require_samuray_to_conquer: true,
-    needed_units_to_defeat: [
+    units: [
       { type: "archer", quantity: 1 },
       { type: "archer", quantity: 1 },
       { type: "cavalry", quantity: 1 },
@@ -153,7 +159,7 @@ const CASTLES = [
     name: "Kitanosho",
     influence: 3,
     require_samuray_to_conquer: true,
-    needed_units_to_defeat: [
+    units: [
       { type: "samuray", quantity: 1 },
       { type: "archer", quantity: 1 },
       { type: "cavalry", quantity: 1 },
@@ -163,6 +169,7 @@ const CASTLES = [
       },
     ],
     conquered_by: null,
+    
   },
   // ---
 
@@ -172,7 +179,7 @@ const CASTLES = [
     name: "Gifu",
     influence: 1,
     require_samuray_to_conquer: true,
-    needed_units_to_defeat: [
+    units: [
       { type: "samuray", quantity: 1 },
       { type: "archer", quantity: 1 },
       { type: "cavalry", quantity: 1 },
@@ -184,7 +191,7 @@ const CASTLES = [
     name: "Matsumoto",
     influence: 2,
     require_samuray_to_conquer: true,
-    needed_units_to_defeat: [
+    units: [
       { type: "archer", quantity: 1 },
       { type: "archer", quantity: 1 },
       {
@@ -193,6 +200,7 @@ const CASTLES = [
       },
     ],
     conquered_by: null,
+    
   },
   {
     color: "yellow",
@@ -200,13 +208,14 @@ const CASTLES = [
     name: "Odani",
     influence: 1,
     require_samuray_to_conquer: true,
-    needed_units_to_defeat: [
+    units: [
       {
         type: "swordsman",
         quantity: 10,
       },
     ],
     conquered_by: null,
+    
   },
   {
     color: "yellow",
@@ -214,7 +223,7 @@ const CASTLES = [
     name: "Azuchi",
     influence: 3,
     require_samuray_to_conquer: true,
-    needed_units_to_defeat: [
+    units: [
       { type: "archer", quantity: 1 },
       { type: "cavalry", quantity: 1 },
       { type: "cavalry", quantity: 1 },
@@ -224,6 +233,7 @@ const CASTLES = [
       },
     ],
     conquered_by: null,
+    
   },
 ];
 
