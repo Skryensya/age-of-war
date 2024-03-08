@@ -6,10 +6,27 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Vite App</title>
     <!-- import output css -->
-    <link rel="stylesheet" href="/src/styles/output.css" />
+    <!-- <link rel="stylesheet" href="/src/styles/output.css" /> -->
+    <script src="https://cdn.tailwindcss.com"></script>
   </head>
   <body>
-    <div class="text-2xl">vite app</div>
+    <div class="flex">
+      <div id="board" class="flex flex-col border p-2 w-full">
+        <p>board</p>
+      </div>
+      <div id="player1" class="flex flex-col border p-2 w-full">
+        <p>player1</p>
+      </div>
+      <div id="player2" class="flex flex-col border p-2 w-full">
+        <p>player2</p>
+      </div>
+      <div
+        id="player2"
+        class="fixed bottom-0 w-screen p-8 border border-red-400"
+      >
+        <p>dice roll</p>
+      </div>
+    </div>
     <script type="module" src="/main.js"></script>
   </body>
 </html>

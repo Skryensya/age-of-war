@@ -1,4 +1,4 @@
-import { CASTLES, DICE } from "./datasets.js";
+import { CASTLES, DICE, UNIT_IMAGES } from "./datasets.js";
 
 // TODO
 // ask how many players
@@ -16,6 +16,8 @@ import { CASTLES, DICE } from "./datasets.js";
 let playerNames = ["Allison", "Camila", "Israel", "Dafne", "Pascal", "Jorge"];
 let selected_number_of_players = 2;
 
+// logic functions
+
 const setupPlayers = () => {
   const players = [];
   for (let i = 0; i < selected_number_of_players; i++) {
@@ -23,12 +25,28 @@ const setupPlayers = () => {
       const number = players.length + 1;
       const player = {
         name: playerNames[i] || `Player #${number}`,
-        conquered_castles: [],
+        // conquered_castles: [],
       };
       players.push(player);
     } else throw new Error("Max number of players is 6");
   }
   return players;
+};
+
+const setupCastlesUnitImages = (castles) => {
+  return castles.map((castle) => {
+    return {
+      ...castle,
+      needed_units_to_defeat: castle.needed_units_to_defeat.map((unit) => {
+        const unitImg = UNIT_IMAGES.find((unitImg) => {
+          return unitImg.type.includes(unit.type);
+        });
+        if (!unitImg) return;
+        unit.img = unitImg.img;
+        return unit;
+      }),
+    };
+  });
 };
 
 function rollDices(quantity) {
@@ -51,42 +69,94 @@ function rollDices(quantity) {
   return rolls;
 }
 
-function checkCastlesToAttack(dices) {
-  //  go dice by dice, check if the it has a match between the military units needed to conquer the dice face, if so, push to an object with the name of the castle as the key and the value being an array of the military units needed to conquer it
-  // const available = [];
-  // make it a MAP
-  const available = new Map();
-  dices.forEach((dice) => {
-    CASTLES.forEach((castle) => {
-      let units_already_rolled = [];
-      if (
-        castle.needed_units_to_defeat.some((unit) => {
-          const match =
-            unit.type === dice.type && unit.quantity <= dice.quantity;
-          if (match) units_already_rolled.push(unit);
-          return match;
-        })
-      ) {
-        // can beconquered instantly
-        const canBeConquered =
-          units_already_rolled.length === castle.needed_units_to_defeat.length;
-        available.set(castle.name, {
-          needed_units_to_defeat: castle.needed_units_to_defeat,
-          units_already_rolled: units_already_rolled,
-          canBeConquered,
-        });
-      }
+function checkIfCastleCanBeAttacked(roll, castle) {
+  const neededUnits = castle.needed_units_to_defeat;
+  const isConqueredByAnotherPlayer = castle.conquered_by !== null;
+  const needsSamuray = castle.require_samuray_to_conquer;
+  if (isConqueredByAnotherPlayer && needsSamuray) {
+    neededUnits.push({ type: "samuray", quantity: 1 });
+  }
+  let canBeAttacked = false;
+  let remainingRoll = roll;
+  let usedToAttack = [];
+  // console.log({ neededUnits });
+  neededUnits.forEach((unit) => {
+    const index = remainingRoll.findIndex((r) => {
+      return r.type === unit.type && r.quantity >= unit.quantity;
     });
+    if (index === -1) return;
+    usedToAttack.push(remainingRoll[index]);
+    remainingRoll.splice(index, 1);
   });
-  return available;
+  if (usedToAttack.length > 0) {
+    canBeAttacked = true;
+  }
+  return [canBeAttacked, usedToAttack];
 }
+
+// draw functions
+
+// draw castles
+
+function drawCastle(castle, selector) {
+  const castleElement = document.createElement("div");
+  castleElement.classList = "border border-black p-4 m-4 ";
+  castleElement.style.backgroundColor = castle.color;
+  castleElement.innerHTML = `
+    <div class="aspect-square flex flex-col justify-between" >
+      <div class="flex justify-between h-full">
+          <div class="flex flex-col justify-between">
+          <div>
+          ${
+            castle.require_samuray_to_conquer
+              ? `<img src="/assets/units/red-samuray.png" class="ratio-square w-12"/>`
+              : ""
+          }
+          </div>
+          <div class="flex flex-col">
+          <p class="text-xl font-bold">${castle.influence}</p>
+            <span class="text-2xl">${castle.name}</span>
+            <span class="text-sm">${castle.realm}</span>
+          </div>
+          </div>
+          <div class="grid grid-cols-2 gap-1 gap-y-3 min-w-[80px] h-fit">
+          ${castle.needed_units_to_defeat
+            .map((unit) => {
+              return unit.type === "swordsman"
+                ? `<div class="border p-2 flex justify-between items-center col-span-2">
+                  ${unit.quantity}
+                  <img src="/assets/units/${unit.img}" class="ratio-square w-12"/>
+                  </div>
+                  `
+                : `<img src="/assets/units/${unit.img}" class="ratio-square w-12"/>`;
+            })
+            .join("")}
+              
+          </div>
+      </div>
+     
+
+  
+     
+    </div>
+    `;
+
+  document.querySelector(selector).appendChild(castleElement);
+}
+
+// draw dices
 
 function Game() {
   let turn = 1;
   let isGameOver = true;
   const players = setupPlayers();
+  const castles = setupCastlesUnitImages(CASTLES);
 
-  console.log(players);
+  console.log(castles);
+
+  castles.forEach((castle) => {
+    drawCastle(castle, "#board");
+  });
 
   // game loop
   while (true) {
@@ -99,8 +169,14 @@ function Game() {
       const roll = rollDices(remainigDices);
       // console.table(roll);
       // show which castles can be attacked
-      const available = checkCastlesToAttack(roll);
-      console.log(Array.from(available).map((castle) => castle.canBeConquered));
+      castles.forEach((castle) => {
+        const [canAttack, usedToAttack] = checkIfCastleCanBeAttacked(
+          roll,
+          castle
+        );
+        // if (canAttack)
+        //   console.log({ castleName: castle.name, canAttack, usedToAttack });
+      });
 
       remainigDices--;
     }
