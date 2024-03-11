@@ -56,19 +56,16 @@ function canAttackCastle(
   return canAttack;
 }
 
-async function selectCastle(roll, castles) {
-  const AvailableToAttack = castles
+function getAvailableToAttackCastles(roll, castles) {
+  return castles
     .map((castle) => {
       const canAttack = canAttackCastle(roll, castle.units);
-      return { canAttack, castle };
+      return { ...castle, canAttack };
     })
-    .filter((castle) => castle.canAttack)
-    .map((castle) => castle.castle);
-
-  AvailableToAttack.forEach((castle) => {
-    highlightCards(roll, castle);
-  });
+    .filter((castle) => castle.canAttack);
 }
+
+async function selectCastle(roll, castles) {}
 
 // --- draw functions ---
 
@@ -84,44 +81,39 @@ function drawCard(castle, selector) {
       ${
         castle.extraSamuray
           ? `
-          <div id="red-samuary" class="absolute top-0 left-0">
-            <img src="/assets/units/red-samuray.png" class="aspect-square w-8" />
-          </div>
-          `
+      <div id="red-samuary" class="absolute top-0 left-0">
+        <img src="/assets/units/red-samuray.png" class="aspect-square w-8" />
+      </div>
+      `
           : ""
       }
       <div class="flex justify-end">
-        <div class=" w-5/12 flex gap-1 flex-wrap ">
+        <div class=" w-5/12 grid grid-cols-2 gap-2">
           ${castle.units
             .map((unit) => {
               return unit.type === "swordsman"
                 ? `
-                    <div id="${unit.type}" class=" w-full border p-1 flex gap-1 justify-between items-center col-span-2">
-                      <div class="">${unit.quantity}</div>  
-                      <img src="/assets/units/${unit.img}" class="aspect-square w-8" />
-                    </div>
-                  `
+            <div id="${unit.type}" class=" border p-1 flex gap-1 justify-between itemas-center col-span-2">
+              <div class="">${unit.quantity}</div>
+              <img src="/assets/units/${unit.img}" class="aspect-square w-8" />
+            </div>
+          `
                 : `
-                    <div id="${unit.type}" class="aspect-square w-8 w-6/12">
-                      <img src="/assets/units/${unit.img}"  />
-                    </div>
-                  `;
+            <div id="${unit.type}" class="aspect-square w-8 ">
+              <img src="/assets/units/${unit.img}" />
+            </div>
+          `;
             })
             .join("")}
         </div>
-
-        
       </div>
-
-
       <div class="flex flex-col justify-between">
-    
-          <div class="flex flex-col">
-            <p class="text-xl font-bold">${castle.influence}</p>
-            <span class="text-2xl">${castle.name}</span>
-            <span class="text-sm">${castle.realm}</span>
-          </div>
+        <div class="flex flex-col">
+          <p class="text-xl font-bold">${castle.influence}</p>
+          <span class="text-2xl">${castle.name}</span>
+          <span class="text-sm">${castle.realm}</span>
         </div>
+      </div>
     </div>
     `;
 
@@ -150,33 +142,6 @@ function drawDiceRoll(roll, selector) {
   });
   document.querySelector(selector).appendChild(diceElement);
 }
-
-// function compareUnitsInRoll(unitsNeeded, roll, outsideFn) {
-//   // Aggregate quantities for unitsNeeded
-//   const unitsNeededAggregated = unitsNeeded.reduce((acc, unit) => {
-//     acc[unit.type] = (acc[unit.type] || 0) + unit.quantity;
-//     return acc;
-//   }, {});
-
-//   // Aggregate quantities for roll
-//   const rollAggregated = roll.reduce((acc, unit) => {
-//     acc[unit.type] = (acc[unit.type] || 0) + unit.quantity;
-//     return acc;
-//   }, {});
-
-//   console.log({ unitsNeededAggregated, rollAggregated });
-
-//   // Compare and find mismatches
-//   Object.keys(rollAggregated).forEach((unitType) => {
-//     const neededQuantity = unitsNeededAggregated[unitType] || 0;
-//     const rollQuantity = rollAggregated[unitType];
-//     if (rollQuantity > neededQuantity) {
-//       const mismatchQuantity = rollQuantity - neededQuantity;
-//       // Call outsideFn for each mismatch
-//       outsideFn(unitType, mismatchQuantity);
-//     }
-//   });
-// }
 
 function highlightCards(roll, castle) {
   const unitsNeeded = castle.units;
@@ -216,8 +181,6 @@ async function Game() {
   const players = setupPlayers();
   const castles = CASTLES;
 
-  // console.log(castles);
-
   castles.forEach((castle) => {
     drawCard(castle, "#board");
   });
@@ -237,14 +200,11 @@ async function Game() {
       const roll = rollDices(remainigDices);
       drawDiceRoll(roll, "#dice-roll"); // -> Draw
 
-      // show which castles can be attacked
-
-      // selectedCastle = castles.find((castle) => {
-      //   return castle.name === "Azuchi";
-      // });
-
-      // test here if you already have a selected castle
       if (!selectedCastle) {
+        const AvailableToAttack = getAvailableToAttackCastles(roll, castles);
+        AvailableToAttack.forEach((castle) => {
+          highlightCards(roll, castle);
+        });
         selectedCastle = await selectCastle(roll, castles);
       }
 

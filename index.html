@@ -5,24 +5,19 @@
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Vite App</title>
-    <!-- import output css -->
-    <!-- <link rel="stylesheet" href="/src/styles/output.css" /> -->
     <script src="https://cdn.tailwindcss.com"></script>
   </head>
   <body class="opacity-[1] pb-40">
     <div class="flex">
       <div id="board" class="flex flex-wrap px-20"></div>
-      <!-- <div id="player1" class="flex flex-col border p-2 w-full">
-        <p>player1</p>
-      </div>
-      <div id="player2" class="flex flex-col border p-2 w-full">
-        <p>player2</p>
-      </div> -->
+
       <div
-        id="dice-roll"
         class="fixed bottom-0 w-screen p-4 pt-2 border border-red-400 bg-white"
       >
-        <p>Dice roll</p>
+        <div id="dice-roll"><p>Dice roll</p></div>
+        <button id="play-turn" class="mt-4 p-1 border border-red-400 hover:bg-red-200 rounded">
+          <p>Play turn</p>
+        </button>
       </div>
     </div>
     <script type="module" src="/src/scripts/main.js"></script>
