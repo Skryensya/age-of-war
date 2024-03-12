@@ -65,7 +65,24 @@ function getAvailableToAttackCastles(roll, castles) {
     .filter((castle) => castle.canAttack);
 }
 
-async function selectCastle(roll, castles) {}
+async function selectCastle(selectableCastles) {
+  return new Promise((resolve) => {
+    // add a click event listener to each card
+    selectableCastles.forEach((castle) => {
+      const card = document.getElementById(castle.name);
+      card.addEventListener("click", () => {
+        // remove the click event listener from each card
+        selectableCastles.forEach((castle) => {
+          const card = document.getElementById(castle.name);
+          card.removeEventListener("click", () => {});
+        });
+
+        // resolve the promise with the selected castle
+        resolve(castle);
+      });
+    });
+  });
+}
 
 // --- draw functions ---
 
@@ -205,7 +222,11 @@ async function Game() {
         AvailableToAttack.forEach((castle) => {
           highlightCards(roll, castle);
         });
-        selectedCastle = await selectCastle(roll, castles);
+        selectedCastle = await selectCastle(AvailableToAttack);
+
+        console.log({
+          selectedCastle,
+        });
       }
 
       break;
@@ -243,4 +264,28 @@ async function Game() {
   }
 }
 
-Game();
+// Game();
+
+// drag and drop
+const draggableElement = document.querySelector('p[draggable="true"]');
+
+draggableElement.addEventListener("dragstart", (event) => {
+  event.dataTransfer.dropEffect = "move";
+  event.dataTransfer.setData("text/plain", "This text may be dragged");
+});
+
+const dropElement = document.getElementById("drop-target");
+
+dropElement.addEventListener("dragenter", (event) => {
+  event.preventDefault();
+});
+
+dropElement.addEventListener("dragover", (event) => {
+  event.preventDefault();
+});
+
+dropElement.addEventListener("drop", (event) => {
+  const text = event.dataTransfer.getData("text/plain");
+  event.target.textContent = text;
+  event.preventDefault();
+});
