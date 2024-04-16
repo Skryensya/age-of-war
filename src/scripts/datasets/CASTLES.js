@@ -5,10 +5,18 @@ const UNIT_IMAGES = {
   swordsman: "swordsman-1.webp",
 };
 
+const UNIT_CODE = {
+  archer: "ar",
+  cavalry: "ca",
+  samuray: "sa",
+  swordsman: "sw",
+};
+
 const _buildUnit = (type, quantity) => ({
   type,
   quantity,
   img: UNIT_IMAGES[type],
+  code: UNIT_CODE[type],
 });
 
 const CASTLES = [
