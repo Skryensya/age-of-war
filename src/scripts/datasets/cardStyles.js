@@ -45,7 +45,9 @@ export function cardStyle1(castle) {
 
 export function cardStyle2(castle) {
   return `
-      <div class="aspect-square w-48  border border-black m-1 ">
+      <div class="aspect-square w-48  border  m-1 ${
+        castle.conquered_by ? "border-green-500" : "border-black"
+      }">
           <div class="bg-[${castle.color}] p-2 flex justify-between">
               <div class="flex flex-col">
                   <span class="text-xl">${castle.name}</span>
