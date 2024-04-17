@@ -12,11 +12,8 @@ export class Game {
     this.turn = 1;
     this.isGameOver = false;
     this.players = this.setupPlayers();
-    this.castles = CASTLES;
-
-    this.castles.forEach((castle) => {
-      this.drawCard(castle, "#board");
-    });
+    this.castles;
+    this.setCastles(CASTLES);
 
     // TODO: randomly select who goes first
     // TODO: this is not random, its decides by a dice Roll
@@ -26,9 +23,19 @@ export class Game {
     this.currentCard;
   }
 
+  setCastles(newCastles) {
+    this.castles = newCastles;
+
+    // TODO: make a callback
+    console.log("recreate");
+    this.castles.forEach((castle) => {
+      this.drawCard(castle, "#board");
+    });
+  }
+
   async startGameLoop() {
     while (true) {
-      console.log(`Turn: ${this.turn}`);
+      console.log(`Turn: ${this.turn} ------------------------------`);
       let remainigDices = 7;
       let selectedCastle = null;
       let unitsAttacked = [];
@@ -45,8 +52,7 @@ export class Game {
         if (!selectedCastle) {
           let selectedUnits;
           [selectedCastle, selectedUnits] = await this.selectCastleAndUnits(
-            roll,
-            this.castles
+            roll
           );
           unitsUsedToAttack = selectedUnits;
         } else {
@@ -64,24 +70,29 @@ export class Game {
           );
         }
 
-        console.log({
-          selectedCastle,
-          unitsUsedToAttack,
-        });
-
         unitsUsedToAttack.forEach((unit) => unitsAttacked.push(unit));
 
-        // if !canAttackSelectedCastle, the player can't keep trying to conquer the castle and a end of turn is triggered
-        // if (!this.canAttackCastle(roll, selectedCastle.units)) {
-        //   --remainigDices;
-        //   break;
-        // }
+        const isSelectedCastleConquered = this.checkIfConquered(
+          selectedCastle.units,
+          unitsAttacked
+        );
 
-        // Attack the selectedcastle with the selected units from the roll
+        console.log({ isSelectedCastleConquered });
+        if (isSelectedCastleConquered) {
+          const copyOfCastles = JSON.parse(JSON.stringify(this.castles));
+          const conqueredCastle = copyOfCastles.find(
+            (castle) => castle.name === selectedCastle.name
+          );
+          conqueredCastle.conquered_by = this.currentPlayer.name;
 
-        // rest the amount of dices used from the remaining dices
+          this.setCastles(copyOfCastles);
 
-        // at lest -1 but can grow to all the dice used
+          // TODO: change to next player, trigger next turn
+          this.selectedCastle = null;
+          remainigDices = 7;
+          break;
+        }
+
         if (unitsUsedToAttack.length) {
           remainigDices -= unitsUsedToAttack.length;
         } else remainigDices--;
@@ -99,6 +110,54 @@ export class Game {
   }
 
   // --- logic functions ---
+
+  checkIfConquered(castleUnits, rolledUnits) {
+    // Check if the arrays have the same length
+    if (castleUnits.length !== rolledUnits.length) {
+      console.log({
+        cUnitLenght: castleUnits.length,
+        rUnitLenght: olledUnits.length,
+      });
+      return false;
+    }
+
+    const sortedCastleUnits = castleUnits.slice().sort((a, b) => {
+      // Compare the entire key strings
+      return a.key.localeCompare(b.key);
+    });
+
+    const sortedRolledUnits = rolledUnits.slice().sort((a, b) => {
+      // Compare the entire key strings
+      return a.key.localeCompare(b.key);
+    });
+
+    // console.table([
+    //   sortedCastleUnits.map((e) => e.key),
+    //   sortedRolledUnits.map((e) => e.key),
+    // ]);
+
+    // Iterate over each object in the arrays and compare their properties
+    for (let i = 0; i < sortedCastleUnits.length; i++) {
+      const cUnit = sortedCastleUnits[i];
+      const rUnit = sortedRolledUnits[i];
+
+      delete rUnit.element;
+
+      // Check if the objects have the same number of properties
+      if (Object.keys(cUnit).length !== Object.keys(rUnit).length) {
+        return false;
+      }
+
+      // Check if the properties of the objects are equal
+      for (const key in cUnit) {
+        if (cUnit[key] !== rUnit[key]) {
+          return false;
+        }
+      }
+    }
+
+    return true;
+  }
 
   setupPlayers() {
     const players = [];
@@ -145,8 +204,8 @@ export class Game {
     return canAttack;
   }
 
-  getAvailableToAttackCastles(roll, castles) {
-    return castles
+  getAvailableToAttackCastles(roll) {
+    return this.castles
       .map((castle) => {
         const canAttack = this.canAttackCastle(roll, castle.units);
         return { ...castle, canAttack };
@@ -240,8 +299,8 @@ export class Game {
     });
   }
 
-  async selectCastleAndUnits(roll, castles) {
-    const selectableCastles = this.getAvailableToAttackCastles(roll, castles);
+  async selectCastleAndUnits(roll) {
+    const selectableCastles = this.getAvailableToAttackCastles(roll);
 
     return new Promise((resolve) => {
       // add a click event listener to each card
@@ -261,6 +320,10 @@ export class Game {
   // --- draw functions ---
 
   drawCard(castle, selector) {
+    // delete if already exits
+    const alreadyExists = document.getElementById(castle.name);
+    if (alreadyExists) alreadyExists.remove();
+
     const cardElement = document.createElement("div");
     cardElement.id = castle.name;
     cardElement.innerHTML = cardStyle2(castle);
